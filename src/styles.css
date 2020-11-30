@@ -6,6 +6,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
     background-color: rgb(166, 170, 173);
 }
 
+.m-0 {
+    margin: 0 !important;
+}
 .m-1 {
     margin: 1rem !important;
 }
@@ -25,9 +28,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
     margin-left: 3rem !important;
     margin-right: 3rem !important;
 }
+.mlr-5 {
+    margin-left: 5rem !important;
+    margin-right: 5rem !important;
+}
 
 .p-1 {
     padding: 1rem !important;
+}
+.p-3 {
+    padding: 3rem !important;
 }
 .p-0-5 {
     padding: 0.5rem !important;

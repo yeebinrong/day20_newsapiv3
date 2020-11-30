@@ -1,0 +1,10 @@
+img {
+    width:100px;
+    display: inline-block;
+}
+
+p {
+    white-space: normal;
+    line-height: normal;
+    margin: 0;
+}

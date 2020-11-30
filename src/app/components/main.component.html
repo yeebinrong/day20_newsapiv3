@@ -1,4 +1,16 @@
-<mat-card class="mlr-3 mt-1 mb-1 border-black" fxLayout="row" fxLayoutAlign="space-between center">
-    <mat-card-title>Main</mat-card-title>
-    <button type="button" mat-raised-button color="primary" [routerLink]="['settings']">Settings</button>
-</mat-card>
+<div fxLayout="column">
+    <mat-card class="mlr-3 mt-1 mb-1 border-black" fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-card-title>Main</mat-card-title>
+        <button type="button" mat-raised-button color="primary" [routerLink]="['settings']">Settings</button>
+    </mat-card>
+    <button type="button" *ngFor="let i of countryList" [routerLink]="['/detailed/', i.alpha2Code]" mat-raised-button class="mlr-5 mt-1 mb-1 p-1" fxLayout="column" fxLayoutAlign="end">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div fxFlex="50">
+                <p>{{i.name}}</p>
+            </div>
+            <div fxLayoutAlign="center">
+                <img src="{{i.flag}}">
+            </div>
+        </div>
+    </button>
+</div>
