@@ -23,19 +23,9 @@ export class MainComponent implements OnInit {
         this.router.navigate(['/settings'])
       }
     })
-    this.getList();
-  }
-
-  getList () {
     this.apiSvc.getList()
     .then (results => {
-      this.countryList = results.map(i => {
-        return {
-          alpha2Code: i.alpha2Code,
-          name: i.name,
-          flag: i.flag
-        } as Country
-      })
+      this.countryList = results;
     })
   }
 }

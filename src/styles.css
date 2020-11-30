@@ -2,10 +2,21 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: rgb(206, 206, 206);}
 
+/* HTML */
+img {
+    width:100px;
+    display: inline-block;
+}
+p {
+    white-space: normal;
+    line-height: normal;
+    margin: 0;
+}
+
+/* CLASSES */
 .hover:hover {
     background-color: rgb(166, 170, 173);
 }
-
 .m-0 {
     margin: 0 !important;
 }
@@ -73,4 +84,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .border-black {
     border: solid black 3px;
     border-collapse: collapse;
+}
+
+.vertical-center {
+    vertical-align: center;
 }

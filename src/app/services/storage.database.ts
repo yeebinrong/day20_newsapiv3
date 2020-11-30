@@ -7,7 +7,7 @@ import { ApiKey, Country } from '../models';
 })
 export class StorageDatabase extends Dexie {
   private api: Dexie.Table<ApiKey, string>;
-  private list: Dexie.Table<Country[], string>;
+  private list: Dexie.Table<Country, string>;
   private articles: Dexie.Table<ApiKey, string>;
   constructor() { 
     // database name
@@ -41,5 +41,25 @@ export class StorageDatabase extends Dexie {
   }
   async deleteKey():Promise<any> {
     return await this.api.delete('key');
+  }
+
+  // list
+  async hasList():Promise<boolean> {
+    return (await this.list.toArray()).length > 0;
+  }
+  async saveList(list:Country[]):Promise<any> {
+    return await this.list.bulkPut(list);
+  }
+  async getList():Promise<Country[]> {
+    return await this.list.toArray();
+  }
+  getCountry(code:string):Promise<Country> {
+    return this.list.where('alpha2Code').equalsIgnoreCase(code)
+    .toArray()
+    .then(result => {
+      if (result.length > 0)
+        return result[0]
+      return null
+    })
   }
 }
