@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Country } from '../models';
+import { Article, Country } from '../models';
 import { ApiService } from '../services/api.service';
 import { StorageDatabase } from '../services/storage.database';
 
@@ -12,6 +12,7 @@ import { StorageDatabase } from '../services/storage.database';
 export class DetailedComponent implements OnInit {
   code:string;
   country:Country;
+  articles:Article[]
   constructor(private db: StorageDatabase, private router:Router, private apiSvc:ApiService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -19,6 +20,10 @@ export class DetailedComponent implements OnInit {
     this.db.getCountry(this.code)
     .then (results => {
       this.country = results;
+      this.apiSvc.getArticles(this.code)
+      .then (results => {
+        this.articles = results;
+      })
     })
   }
 

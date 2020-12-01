@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Dexie from 'dexie';
-import { ApiKey, Country } from '../models';
+import { ApiKey, Article, Country } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ import { ApiKey, Country } from '../models';
 export class StorageDatabase extends Dexie {
   private api: Dexie.Table<ApiKey, string>;
   private list: Dexie.Table<Country, string>;
-  private articles: Dexie.Table<ApiKey, string>;
+  private articles: Dexie.Table<Article, string>;
   constructor() { 
     // database name
     super("news");
@@ -41,6 +41,20 @@ export class StorageDatabase extends Dexie {
   }
   async deleteKey():Promise<any> {
     return await this.api.delete('key');
+  }
+
+  // article
+  async hasArticles():Promise<boolean> {
+    return true;
+  }
+  async getArticles():Promise<boolean> {
+    return true;
+  }
+  async saveArticles(articles:Article[]):Promise<any> {
+    return this.articles.bulkPut(articles);
+  }
+  async deleteArticles():Promise<any> {
+    return true;
   }
 
   // list
