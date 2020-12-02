@@ -30,4 +30,10 @@ export class DetailedComponent implements OnInit {
   changeSource(e) {
     e.target.src = "assets/404.png"
   }
+  async checkToggle(i) {
+    i.saved = 1;
+    const array:Article[] = []
+    array.push(i);
+    await this.db.saveArticles(array);
+  }
 }

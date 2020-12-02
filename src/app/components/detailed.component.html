@@ -1,4 +1,4 @@
-<mat-card class="mlr-3 mt-1 mb-1 border-black" fxLayoutAlign="space-between">
+<mat-card class="mlr-3 mt-1 mb-1" fxLayoutAlign="space-between">
     <ng-container *ngIf="this.country">    
         <div fxFlex="50" fxLayoutAlign="center center">
             <p class="m-0">{{this.country.name}}</p>
@@ -23,5 +23,7 @@
     <p>{{i.title}}</p>
     <img fxFill src="{{i.urlToImage}}" (error)="changeSource($event)">
     <button mat-raised-button type="button"><a href="{{i.url}}" target="_blank">Read More</a></button>
-    <button type="button" mat-raised-button>Save article</button>
+    <mat-slide-toggle class="m-1" [checked]="!!i.saved" (toggleChange)="checkToggle(i)">
+        Save Article
+    </mat-slide-toggle>
 </mat-card>
