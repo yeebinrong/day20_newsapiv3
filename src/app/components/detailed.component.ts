@@ -27,9 +27,11 @@ export class DetailedComponent implements OnInit {
     })
   }
 
+  // if image has error loading
   changeSource(e) {
     e.target.src = "assets/404.png"
   }
+  // toggles the save article 
   async checkToggle(i) {
     i.saved = 1;
     const array:Article[] = []

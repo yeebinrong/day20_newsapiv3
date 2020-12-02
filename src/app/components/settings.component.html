@@ -2,15 +2,4 @@
     <mat-card-title>Settings</mat-card-title>
     <button type="button" mat-raised-button color="primary" [routerLink]="['/']">Back</button>
 </mat-card>
-<mat-card class="m-1 border-black" fxLayout="row" fxLayoutAlign="space-between center">
-    <form [formGroup]="_form" fxLayout="column" fxFill (ngSubmit)="saveKey()">
-        <mat-form-field appearance="outline">
-            <input matInput formControlName="apikey" placeholder="Please enter your API key.">
-            <mat-error>Enter a valid key.</mat-error>
-        </mat-form-field>
-        <div fxLayout="row" fxLayoutAlign="end">
-            <button type="submit" class="mr-1" [disabled]="_form.invalid" mat-raised-button color="accent">Save</button>
-            <button type="button" (click)="deleteKey()" mat-raised-button color="warn" [disabled]="_form.invalid">Delete</button>
-        </div>
-    </form>
-</mat-card>
+<app-form></app-form>
