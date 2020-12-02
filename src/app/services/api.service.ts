@@ -7,6 +7,8 @@ const CODES = 'ae ar at au be bg br ca ch cn co cu cz de eg fr gb gr hk hu id ie
 const LIST_ENDPOINT = 'https://restcountries.eu/rest/v2/alpha?';
 const NEWS_ENDPOINT = 'https://newsapi.org/v2/top-headlines';
 
+const CACHE_TIME_LIMIT = 1000 * 60 * 5;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,34 +33,62 @@ export class ApiService {
   }
 
   async getArticles(code:string):Promise<Article[]> {
-    // check if db has articles
-    // if true retrieve those articles
-    // check find first article that is not saved
-    // check if it is passed 5minutes
-    // if true set to refresh and delete all article that is not saved
-    // get new articles from api use current articles from db to filter the rest
-    // return the articles
-    const params = new HttpParams().set('category', 'general').set('pageSize', '30').set('country', code);
-    const apikey = await this.db.getKey()
-    const headers = new HttpHeaders().set('X-Api-Key', apikey);
-    const data = (await this.http.get(NEWS_ENDPOINT, {headers: headers, params: params}).toPromise())['articles'];
-    const results:Article[] = data.map(d => {
-      return {
-        code: code,
-        author: d.author,
-        content: d.content,
-        description: d.description,
-        publishedAt: d.publishedAt,
-        source: d.source,
-        title: d.title,
-        url: d.url,
-        urlToImage: d.urlToImage,
-        saved: false,
-        timestamp: Date.now()
-      } as Article
-    })
-    this.db.saveArticles(results);
-    return Promise.resolve(results);
+    let articles:Article[] = [];
+    const bool = await this.db.hasArticles(code);
+    let shouldRefresh:boolean = !bool;
+    if (bool) {
+      // has articles in db
+      console.info("articles from db")
+      articles = await this.db.getArticles(code)
+      const FIRST_ARTICLE_NOT_SAVED = articles.find(e =>
+        e.saved == 0
+      )
+      if (Date.now() - FIRST_ARTICLE_NOT_SAVED.timestamp >= CACHE_TIME_LIMIT ) {
+        console.info("5 minutes has passed")
+        await this.db.deleteArticles(articles.filter(a => !a.saved));
+        articles = articles.filter(a => a.saved);
+        shouldRefresh = true;
+      }
+    }
+    if (shouldRefresh) {
+      // does not have article in db
+      console.info("should refresh")
+      console.info("articles from api")
+
+      // primary keys of all the saved articles
+      const saveSet = new Set();
+      articles.forEach(a => {
+				saveSet.add(a.publishedAt)
+      })
+      
+      const params = new HttpParams().set('category', 'general').set('pageSize', '30').set('country', code);
+      const apikey = await this.db.getKey()
+      const headers = new HttpHeaders().set('X-Api-Key', apikey);
+      const data = (await this.http.get(NEWS_ENDPOINT, {headers: headers, params: params}).toPromise())['articles'];
+      const results = data
+        .filter(a => !saveSet.has(a.publishedAt))
+        .map(d => {
+        return {
+          code: code,
+          author: d.author,
+          content: d.content,
+          description: d.description,
+          publishedAt: d.publishedAt,
+          source: d.source,
+          title: d.title,
+          url: d.url,
+          urlToImage: d.urlToImage,
+          saved: 0,
+          timestamp: Date.now()
+        } as Article
+      })
+
+      this.db.saveArticles(results);
+      articles = [...articles, ...results];
+    }
+    
+
+    return Promise.resolve(articles);
   }
 
   //// PRIVATE FUNCTIONS ////

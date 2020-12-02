@@ -27,4 +27,7 @@ export class DetailedComponent implements OnInit {
     })
   }
 
+  changeSource(e) {
+    e.target.src = "assets/404.png"
+  }
 }

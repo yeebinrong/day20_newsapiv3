@@ -44,17 +44,17 @@ export class StorageDatabase extends Dexie {
   }
 
   // article
-  async hasArticles():Promise<boolean> {
-    return true;
+  async hasArticles(code:string):Promise<boolean> {
+    return (await this.articles.where('code').equalsIgnoreCase(code).toArray()).length > 0;
   }
-  async getArticles():Promise<boolean> {
-    return true;
+  async getArticles(code:string):Promise<Article[]> {
+    return await this.articles.where('code').equalsIgnoreCase(code).toArray();
   }
   async saveArticles(articles:Article[]):Promise<any> {
-    return this.articles.bulkPut(articles);
+    return await this.articles.bulkPut(articles);
   }
-  async deleteArticles():Promise<any> {
-    return true;
+  async deleteArticles(articles:Article[]):Promise<any> {
+    return await this.articles.bulkDelete(articles.map(a => a.publishedAt));
   }
 
   // list

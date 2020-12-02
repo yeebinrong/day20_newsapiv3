@@ -21,7 +21,7 @@ export interface Article {
     title: string,
     url: string,
     urlToImage: string,
-    saved: boolean,
+    saved: number,
     timestamp: number
 }
 
