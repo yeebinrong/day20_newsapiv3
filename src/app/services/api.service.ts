@@ -65,6 +65,7 @@ export class ApiService {
       const apikey = await this.db.getKey()
       const headers = new HttpHeaders().set('X-Api-Key', apikey);
       const data = (await this.http.get(NEWS_ENDPOINT, {headers: headers, params: params}).toPromise())['articles'];
+      const ts = Date.now()
       const results = data
         .filter(a => !saveSet.has(a.publishedAt))
         .map(d => {
@@ -79,7 +80,7 @@ export class ApiService {
           url: d.url,
           urlToImage: d.urlToImage,
           saved: 0,
-          timestamp: Date.now()
+          timestamp: ts
         } as Article
       })
 
